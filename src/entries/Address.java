@@ -1,5 +1,7 @@
 package entries;
 
+import java.util.Objects;
+
 public class Address {
     private long id;
     private String street;
@@ -15,6 +17,27 @@ public class Address {
         this.postalCode = builder.postalCode;
         this.city = builder.city;
         this.isWork = builder.isWork;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
+        if(o == null) {
+            return false;
+        }
+        if (getClass() != o.getClass()) {
+            return false;
+        }
+        Address address = (Address) o;
+        return Objects.equals(id, address.id) && Objects.equals(street, address.street) && Objects.equals(houseNumber, address.houseNumber) && 
+            Objects.equals(postalCode, address.postalCode) && Objects.equals(city, address.city) && Objects.equals(isWork, address.isWork);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, street, houseNumber, postalCode, city, isWork);
     }
 
     public long getId() {
