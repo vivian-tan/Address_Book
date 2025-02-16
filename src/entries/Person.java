@@ -4,8 +4,6 @@ public class Person {
     private String firstname;
     private String lastname;
     private String birthday;
-    private Address address;
-    private Phone phone;
 
     public Person() {
 
