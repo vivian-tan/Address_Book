@@ -21,12 +21,10 @@ import types.MainMenuOptions;
 
 public class AddressBookService {
     private ContactService contactService;
-    private AddressBookQueries queries;
     private Scanner userInputReader;
 
-    public AddressBookService(AddressBookQueries queries, Scanner userInputReader) {
-        this.contactService = new ContactService(queries);
-        this.queries = queries;
+    public AddressBookService(Scanner userInputReader) {
+        this.contactService = new ContactService();
         this.userInputReader = userInputReader;
     }
 
@@ -51,7 +49,7 @@ public class AddressBookService {
     }
 
     private void showContacts() {
-        printPersonList(queries.getAllPeople().stream().map(Contact::getPerson).collect(Collectors.toList()));
+        printPersonList(contactService.getAllPeople());
         printPossibleActions(ContactListOptions.values());
        
         switch(userInputReader.nextLine()) {
@@ -93,7 +91,7 @@ public class AddressBookService {
             contactBuilder.phoneNumbers(getInputForPhones());
         }
 
-        queries.addContact(contactBuilder.build());
+        contactService.addContact(contactBuilder.build());
         showContacts();
     }
 
@@ -109,7 +107,7 @@ public class AddressBookService {
     }
 
     private void showContact(long id) {
-        Contact contact = queries.getContact(id);
+        Contact contact = contactService.getContact(id);
         if(contact != null) {
             printContactDetails(contact);
         }
@@ -148,7 +146,7 @@ public class AddressBookService {
     }
 
     private void editContact(Long personId) {
-        Contact contact = queries.getContact(personId);
+        Contact contact = contactService.getContact(personId);
         if(contact != null) {
             printContactDetails(contact);
         }
@@ -160,20 +158,20 @@ public class AddressBookService {
                 break;
             case "2":
                 Person person = getInputForPerson(personId);
-                queries.updatePerson(person);
+                contactService.updatePerson(person);
                 editContact(personId);
                 break;
             case "3":
                 System.out.println("Welche Adresse möchtest du bearbeiten? Gib die Nummer an: ");
                 Long editAddressId = Long.valueOf(userInputReader.nextLine());
                 if(editAddressId != null) {
-                    queries.updateAddress(getInputForAddress(editAddressId), personId);
+                    contactService.updateAddress(getInputForAddress(editAddressId), personId);
                 }
                 editContact(personId);
                 break;
             case "4":
                 for(Address address : getInputForAddresses()) {
-                    queries.addAddress(address, personId);
+                    contactService.addAddress(address, personId);
                 }
 
                 editContact(personId);
@@ -182,7 +180,7 @@ public class AddressBookService {
                 System.out.println("Welche Adresse möchtest du löschen? Gib die Nummer an: ");
                 Long deleteAddressId = Long.valueOf(userInputReader.nextLine());
                 if(deleteAddressId != null) {
-                    queries.deleteAddress(deleteAddressId, personId);
+                    contactService.deleteAddress(deleteAddressId, personId);
                 }
                 
                 editContact(personId);
@@ -191,13 +189,13 @@ public class AddressBookService {
                 System.out.println("Welche Telefonnummer möchtest du bearbeiten? Gib die Nummer an: ");
                 Long editPhoneId = Long.valueOf(userInputReader.nextLine());
                 if(editPhoneId != null) {
-                    queries.updatePhone(getInputForPhone(editPhoneId), personId);
+                    contactService.updatePhone(getInputForPhone(editPhoneId), personId);
                 }
                 editContact(personId);
                 break;
             case "7":
                 for(Phone phone : getInputForPhones()) {
-                    queries.addPhone(phone, personId);
+                    contactService.addPhone(phone, personId);
                 }
                 
                 editContact(personId);
@@ -206,7 +204,7 @@ public class AddressBookService {
                 System.out.println("Welche Telefonnummer möchtest du löschen? Gib die Nummer an: ");
                 Long deletePhoneId = Long.valueOf(userInputReader.nextLine());
                 if(deletePhoneId != null) {
-                    queries.deletePhone(deletePhoneId, personId);
+                    contactService.deletePhone(deletePhoneId, personId);
                 }
                 
                 editContact(personId);
@@ -223,13 +221,13 @@ public class AddressBookService {
         System.out.println("Welchen Kontakt möchtest du löschen? Gib die Nummer an: ");
         Long id = Long.valueOf(userInputReader.nextLine());
         if(id != null) {
-            queries.deleteContact(id);
+            contactService.deleteContact(id);
         }
         showContacts();
     }
 
     private void removeContact(long id) {
-        queries.deleteContact(id);
+        contactService.deleteContact(id);
         showContacts();
     }
 

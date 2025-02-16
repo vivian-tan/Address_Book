@@ -26,17 +26,6 @@ public class AddressBookQueries {
         database = new Database();
     }
 
-    //TODO: not the right place? and foreach
-    public void addContact(Contact contact) {
-        long personId = addPerson(contact.getPerson());
-        for(Address address : contact.getAddresses()) {
-            addAddress(address, personId);
-        }
-        for(Phone phone : contact.getPhoneNumbers()) {
-            addPhone(phone, personId);
-        } 
-    }
-
     public long addPerson(Person person) {
         String sql = "INSERT INTO person (firstname, lastname, birthday) VALUES (?, ?, ?)";
         try(Connection connection = database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
