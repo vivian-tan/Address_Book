@@ -8,6 +8,7 @@ import entries.Address;
 import entries.AddressBuilder;
 import entries.Contact;
 import entries.ContactBuilder;
+import entries.ContactService;
 import entries.Person;
 import entries.PersonBuilder;
 import entries.Phone;
@@ -19,10 +20,12 @@ import types.IOption;
 import types.MainMenuOptions;
 
 public class AddressBookService {
+    private ContactService contactService;
     private AddressBookQueries queries;
     private Scanner userInputReader;
 
     public AddressBookService(AddressBookQueries queries, Scanner userInputReader) {
+        this.contactService = new ContactService(queries);
         this.queries = queries;
         this.userInputReader = userInputReader;
     }

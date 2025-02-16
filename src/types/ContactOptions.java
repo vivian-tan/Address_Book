@@ -25,8 +25,4 @@ public enum ContactOptions implements IOption{
     public String getLabel(){
         return label;
     }
-    @Override
-    public List<IOption> getValues() {
-        return Arrays.asList(ContactOptions.values());
-    }
 }
