@@ -148,63 +148,233 @@ public class AddressBookApp {
         System.out.println("Welchen Kontakt möchtest du dir ansehen? Gib die Nummer an: ");
         Long id = Long.valueOf(userInputReader.nextLine());
         if(id != null) {
-            Contact contact = queries.getContact(id);
-            if(contact != null) {
-                System.out.println("--------------------");
-                System.out.println("Person:");
-                System.out.println("Nr.\tVorname\t\tNachname\t\tGeburtstag");
-                if(contact.getPerson() != null) {
-                    System.out.println(contact.getPerson().getId() + "\t" + contact.getPerson().getFirstname() + "\t\t" + contact.getPerson().getLastname() + "\t\t" + contact.getPerson().getBirthday());
-                }
-                System.out.println("----------");
-                System.out.println("Adressen:");
-                System.out.println("Nr.\tStraße\t\tHausnummer\t\tPLZ\t\tOrt\t\tArt der Anschrift");
-                for(Address address : contact.getAddresses()) {
-                    System.out.println(address.getId() + "\t" + address.getStreet() + "\t\t" + address.getHouseNumber() + "\t\t" + address.getPostalCode() + "\t\t" + address.getCity() + "\t\t" + (address.isWork() ? "geschäftlich" : "privat"));
-                }
-                System.out.println("----------");
-                System.out.println("Telefon:");
-                System.out.println("Nr.\tFestnetznr.\t\tHandynr.\t\tArt der Nummer");
-                for(Phone phoneNumber : contact.getPhoneNumbers()) {
-                    System.out.println(phoneNumber.getId() + "\t" + phoneNumber.getLandlineNumber() + "\t\t" + phoneNumber.getMobileNumber() + "\t\t" + (phoneNumber.isWork() ? "geschäftlich" : "privat"));
-                }
-            }
-
-            System.out.println("--------------------");
-            System.out.println("Du kannst folgende Aktionen durchführen: ");
-            for(Map.Entry<String, ActionType> entry : showContactKeyMap.entrySet()) {
-                System.out.println(entry.getKey() + " - " + entry.getValue().getLabel());
-            }
-            String nextAction = userInputReader.nextLine();
-            switch(nextAction) {
-                case "1":
-                    mainMenu(userInputReader);
-                    break;
-                case "2":
-                    showContacts(userInputReader);
-                    break;
-                case "3":
-                    editContact(userInputReader);
-                    break;
-                case "4":
-                    removeContact(userInputReader, id);
-                    break;
-                case null:
-                default:
-                    System.out.println("Eingegeben: " + nextAction);
-                    System.out.println("Die Eingabe ist ungültig.");
-                    showContact(userInputReader);
-            }
+            showContact(userInputReader, id);
         } else {
             showContact(userInputReader);
         }
     }
 
-    private static void editContact(Scanner userInputReader) {
+    private static void showContact(Scanner userInputReader, long id) {
+        //TODO: refactor
+        Contact contact = queries.getContact(id);
+        if(contact != null) {
+            System.out.println("--------------------");
+            System.out.println("Person:");
+            System.out.println("Nr.\tVorname\t\tNachname\t\tGeburtstag");
+            if(contact.getPerson() != null) {
+                System.out.println(contact.getPerson().getId() + "\t" + contact.getPerson().getFirstname() + "\t\t" + contact.getPerson().getLastname() + "\t\t" + contact.getPerson().getBirthday());
+            }
+            System.out.println("----------");
+            System.out.println("Adressen:");
+            System.out.println("Nr.\tStraße\t\tHausnummer\t\tPLZ\t\tOrt\t\tArt der Anschrift");
+            for(Address address : contact.getAddresses()) {
+                System.out.println(address.getId() + "\t" + address.getStreet() + "\t\t" + address.getHouseNumber() + "\t\t" + address.getPostalCode() + "\t\t" + address.getCity() + "\t\t" + (address.isWork() ? "geschäftlich" : "privat"));
+            }
+            System.out.println("----------");
+            System.out.println("Telefon:");
+            System.out.println("Nr.\tFestnetznr.\t\tHandynr.\t\tArt der Nummer");
+            for(Phone phoneNumber : contact.getPhoneNumbers()) {
+                System.out.println(phoneNumber.getId() + "\t" + phoneNumber.getLandlineNumber() + "\t\t" + phoneNumber.getMobileNumber() + "\t\t" + (phoneNumber.isWork() ? "geschäftlich" : "privat"));
+            }
+        }
 
+        System.out.println("--------------------");
+        System.out.println("Du kannst folgende Aktionen durchführen: ");
+        for(Map.Entry<String, ActionType> entry : showContactKeyMap.entrySet()) {
+            System.out.println(entry.getKey() + " - " + entry.getValue().getLabel());
+        }
+        switch(userInputReader.nextLine()) {
+            case "1":
+                mainMenu(userInputReader);
+                break;
+            case "2":
+                showContacts(userInputReader);
+                break;
+            case "3":
+                editContact(userInputReader, id);
+                break;
+            case "4":
+                removeContact(userInputReader, id);
+                break;
+            case null:
+            default:
+                System.out.println("Die Eingabe ist ungültig.");
+                showContact(userInputReader);
+        }
+    }
+
+    private static void editContact(Scanner userInputReader) {
+        System.out.println("--------------------");
+        System.out.println("Welchen Kontakt möchtest du bearbeiten? Gib die Nummer an: ");
+        Long id = Long.valueOf(userInputReader.nextLine());
+        if(id != null) {
+            editContact(userInputReader, id);
+        }
+    }
+
+    private static void editContact(Scanner userInputReader, Long personId) {
+        //TODO: refactor into method
+        Contact contact = queries.getContact(personId);
+        if(contact != null) {
+            System.out.println("--------------------");
+            System.out.println("Person:");
+            System.out.println("Nr.\tVorname\t\tNachname\t\tGeburtstag");
+            if(contact.getPerson() != null) {
+                System.out.println(contact.getPerson().getId() + "\t" + contact.getPerson().getFirstname() + "\t\t" + contact.getPerson().getLastname() + "\t\t" + contact.getPerson().getBirthday());
+            }
+            System.out.println("----------");
+            System.out.println("Adressen:");
+            System.out.println("Nr.\tStraße\t\tHausnummer\t\tPLZ\t\tOrt\t\tArt der Anschrift");
+            for(Address address : contact.getAddresses()) {
+                System.out.println(address.getId() + "\t" + address.getStreet() + "\t\t" + address.getHouseNumber() + "\t\t" + address.getPostalCode() + "\t\t" + address.getCity() + "\t\t" + (address.isWork() ? "geschäftlich" : "privat"));
+            }
+            System.out.println("----------");
+            System.out.println("Telefon:");
+            System.out.println("Nr.\tFestnetznr.\t\tHandynr.\t\tArt der Nummer");
+            for(Phone phoneNumber : contact.getPhoneNumbers()) {
+                System.out.println(phoneNumber.getId() + "\t" + phoneNumber.getLandlineNumber() + "\t\t" + phoneNumber.getMobileNumber() + "\t\t" + (phoneNumber.isWork() ? "geschäftlich" : "privat"));
+            }
+        }
+
+        System.out.println("----------");
+        System.out.println("Du kannst folgende Aktionen durchführen: ");
+        System.out.println("1 - Bearbeitung beenden");
+        System.out.println("2 - Angaben zur Person bearbeiten");
+        System.out.println("3 - Angaben zur Adresse bearbeiten");
+        System.out.println("4 - Adresse hinzufügen");
+        System.out.println("5 - Adresse löschen");
+        System.out.println("6 - Angaben zur Telefonnummer bearbeiten");
+        System.out.println("7 - Telefonnummer hinzufügen");
+        System.out.println("8 - Telefonnummer löschen");
+
+        switch(userInputReader.nextLine()) {
+            case "1":
+                showContact(userInputReader, personId);
+                break;
+            case "2":
+                PersonBuilder personBuilder = new PersonBuilder()
+                    .id(personId);
+                System.out.println("--------------------");
+                System.out.println("Wie ist der Vorname des Kontakts?");
+                personBuilder.firstname(userInputReader.nextLine());
+                System.out.println("Wie ist der Nachname des Kontakts?");
+                personBuilder.lastname(userInputReader.nextLine());
+                System.out.println("Wann ist der Geburtstag des Kontakts?");
+                personBuilder.birthday(userInputReader.nextLine());
+
+                queries.updatePerson(personBuilder.build());
+
+                editContact(userInputReader, personId);
+                break;
+            case "3":
+                System.out.println("Welche Adresse möchtest du bearbeiten? Gib die Nummer an: ");
+                Long editAddressId = Long.valueOf(userInputReader.nextLine());
+                if(editAddressId != null) {
+                    AddressBuilder addressBuilder = new AddressBuilder()
+                        .id(editAddressId);
+                    System.out.println("Wie heißt die Straße?");
+                    addressBuilder.street(userInputReader.nextLine());
+                    System.out.println("Wie lautet die Hausnummer?");
+                    addressBuilder.houseNumber(userInputReader.nextLine());
+                    System.out.println("Wie lautet die PLZ?");
+                    addressBuilder.postalCode(userInputReader.nextLine());
+                    System.out.println("Wie heißt die Stadt?");
+                    addressBuilder.city(userInputReader.nextLine());
+                    System.out.println("Ist die Adresse privat oder geschäftlich? (P/G)");
+                    addressBuilder.isWork(userInputReader.nextLine().equals("G"));
+                    
+                    queries.updateAddress(addressBuilder.build(), personId);
+                }
+                
+                editContact(userInputReader, personId);
+                break;
+            case "4":
+                boolean fillAddress = true;
+                while(fillAddress) {
+                    AddressBuilder addressBuilder = new AddressBuilder();
+                    System.out.println("Wie heißt die Straße?");
+                    addressBuilder.street(userInputReader.nextLine());
+                    System.out.println("Wie lautet die Hausnummer?");
+                    addressBuilder.houseNumber(userInputReader.nextLine());
+                    System.out.println("Wie lautet die PLZ?");
+                    addressBuilder.postalCode(userInputReader.nextLine());
+                    System.out.println("Wie heißt die Stadt?");
+                    addressBuilder.city(userInputReader.nextLine());
+                    System.out.println("Ist die Adresse privat oder geschäftlich? (P/G)");
+                    addressBuilder.isWork(userInputReader.nextLine().equals("G"));
+
+                    queries.addAddress(addressBuilder.build(), personId);
+                    
+                    System.out.println("Möchtest du eine weitere Adresse hinterlegen? (J/N)");
+                    fillAddress = userInputReader.nextLine().equals("J");
+                }
+
+                editContact(userInputReader, personId);
+                break;
+            case "5":
+                System.out.println("Welche Adresse möchtest du löschen? Gib die Nummer an: ");
+                Long deleteAddressId = Long.valueOf(userInputReader.nextLine());
+                if(deleteAddressId != null) {
+                    queries.deleteAddress(deleteAddressId, personId);
+                }
+                
+                editContact(userInputReader, personId);
+                break;
+            case "6":
+                System.out.println("Welche Telefonnummer möchtest du bearbeiten? Gib die Nummer an: ");
+                Long editPhoneId = Long.valueOf(userInputReader.nextLine());
+                if(editPhoneId != null) {
+                    PhoneBuilder phoneBuilder = new PhoneBuilder()
+                        .id(editPhoneId);
+                    System.out.println("Wie lautet die Festnetznummer?");
+                    phoneBuilder.landlineNumber(userInputReader.nextLine());
+                    System.out.println("Wie lautet die mobile Nummer?");
+                    phoneBuilder.mobileNumber(userInputReader.nextLine());
+                    System.out.println("Ist die Nummer privat oder geschäftlich? (P/G)");
+                    phoneBuilder.isWork(userInputReader.nextLine().equals("G"));
+
+                    queries.updatePhone(phoneBuilder.build(), personId);
+                }
+                
+                editContact(userInputReader, personId);
+                break;
+            case "7":
+                boolean fillPhone = true;
+                while(fillPhone) {
+                    PhoneBuilder phoneBuilder = new PhoneBuilder();
+                    System.out.println("Wie lautet die Festnetznummer?");
+                    phoneBuilder.landlineNumber(userInputReader.nextLine());
+                    System.out.println("Wie lautet die mobile Nummer?");
+                    phoneBuilder.mobileNumber(userInputReader.nextLine());
+                    System.out.println("Ist die Nummer privat oder geschäftlich? (P/G)");
+                    phoneBuilder.isWork(userInputReader.nextLine().equals("G"));
+                    
+                    queries.addPhone(phoneBuilder.build(), personId);
+
+                    System.out.println("Möchtest du eine weitere Telefonnummer hinterlegen? (J/N)");
+                    fillPhone = userInputReader.nextLine().equals("J");
+                }
+                
+                editContact(userInputReader, personId);
+                break;
+            case "8":
+                System.out.println("Welche Telefonnummer möchtest du löschen? Gib die Nummer an: ");
+                Long deletePhoneId = Long.valueOf(userInputReader.nextLine());
+                if(deletePhoneId != null) {
+                    queries.deletePhone(deletePhoneId, personId);
+                }
+                
+                editContact(userInputReader, personId);
+                break;
+            case null:
+            default:
+                System.out.println("Die Eingabe ist ungültig.");
+                editContact(userInputReader, personId);
+        }
     }
 
     private static void removeContact(Scanner userInputReader) {
+        System.out.println("--------------------");
         System.out.println("Welchen Kontakt möchtest du löschen? Gib die Nummer an: ");
         Long id = Long.valueOf(userInputReader.nextLine());
         if(id != null) {

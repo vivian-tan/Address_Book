@@ -26,7 +26,7 @@ public class AddressBookQueries {
         database = new Database();
     }
 
-    //not the right place? and foreach
+    //TODO: not the right place? and foreach
     public void addContact(Contact contact) {
         long personId = addPerson(contact.getPerson());
         for(Address address : contact.getAddresses()) {
@@ -76,6 +76,49 @@ public class AddressBookQueries {
             preparedStatement.setString(2, phone.getLandlineNumber());
             preparedStatement.setString(3, phone.getMobileNumber());
             preparedStatement.setBoolean(4, phone.isWork());
+            preparedStatement.executeUpdate();
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void updatePerson(Person person) {
+        String sql = "UPDATE person SET firstname = ?, lastname = ?, birthday = ? WHERE person_id = ?";
+        try(Connection connection = database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1, person.getFirstname());
+            preparedStatement.setString(2, person.getLastname());
+            preparedStatement.setString(3, person.getBirthday());
+            preparedStatement.setLong(4, person.getId());
+            preparedStatement.executeUpdate();
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void updateAddress(Address address, Long personId) {
+        String sql = "UPDATE address SET street = ?, house_number = ?, postal_code = ?, city = ?, is_work = ? WHERE person_id = ? AND address_id = ?";
+        try(Connection connection = database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1, address.getStreet());
+            preparedStatement.setString(2, address.getHouseNumber());
+            preparedStatement.setString(3, address.getPostalCode());
+            preparedStatement.setString(4, address.getCity());
+            preparedStatement.setBoolean(5, address.isWork());
+            preparedStatement.setLong(6, personId);
+            preparedStatement.setLong(7, address.getId());
+            preparedStatement.executeUpdate();
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void updatePhone(Phone phone, Long personId) {
+        String sql = "UPDATE phone SET landline_number = ?, mobile_number = ?, is_work = ? WHERE person_id = ? AND phone_id = ?";
+        try(Connection connection = database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setString(1, phone.getLandlineNumber());
+            preparedStatement.setString(2, phone.getMobileNumber());
+            preparedStatement.setBoolean(3, phone.isWork());
+            preparedStatement.setLong(4, personId);
+            preparedStatement.setLong(5, phone.getId());
             preparedStatement.executeUpdate();
         } catch(SQLException e){
             e.printStackTrace();
@@ -146,6 +189,28 @@ public class AddressBookQueries {
         String sql = "DELETE FROM person WHERE person_id = ?";
         try(Connection connection = database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setLong(1, id);
+            preparedStatement.executeQuery();
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteAddress(long id, long person_id) {
+        String sql = "DELETE FROM address WHERE address_id = ? AND person_id = ?";
+        try(Connection connection = database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setLong(1, id);
+            preparedStatement.setLong(2, person_id);
+            preparedStatement.executeQuery();
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void deletePhone(long id, long person_id) {
+        String sql = "DELETE FROM phone WHERE phone_id = ? AND person_id = ?";
+        try(Connection connection = database.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setLong(1, id);
+            preparedStatement.setLong(2, person_id);
             preparedStatement.executeQuery();
         } catch(SQLException e){
             e.printStackTrace();
