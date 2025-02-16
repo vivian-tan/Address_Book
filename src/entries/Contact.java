@@ -10,4 +10,12 @@ public class Contact {
     public Contact() {
         
     }
+
+    public Contact(Person person) {
+        this.person = person;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
 }

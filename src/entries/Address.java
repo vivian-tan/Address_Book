@@ -1,16 +1,25 @@
 package entries;
 
 public class Address {
+    private long id;
     private String street;
     private String houseNumber;
     private String postalCode;
     private String city;
     private boolean isWork;
 
-    public Address() {
-
+    public Address(AddressBuilder builder) {
+        this.id = builder.id;
+        this.street = builder.street;
+        this.houseNumber = builder.houseNumber;
+        this.postalCode = builder.postalCode;
+        this.city = builder.city;
+        this.isWork = builder.isWork;
     }
 
+    public long getId() {
+        return id;
+    }
     public String getStreet() {
         return street;
     }

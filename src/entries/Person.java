@@ -1,14 +1,21 @@
 package entries;
 
 public class Person {
+    private long id;
     private String firstname;
     private String lastname;
     private String birthday;
 
-    public Person() {
-
+    Person(PersonBuilder builder) {
+        this.id = builder.id;
+        this.firstname = builder.firstname;
+        this.lastname = builder.lastname;
+        this.birthday = builder.birthday;
     }
     
+    public long getId() {
+        return id;
+    }
     public String getFirstname() {
         return firstname;
     }

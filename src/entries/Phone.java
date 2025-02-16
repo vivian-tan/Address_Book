@@ -1,14 +1,21 @@
 package entries;
 
 public class Phone {
+    private long id;
     private String landlineNumber;
     private String mobileNumber;
     private boolean isWork;
 
-    public Phone() {
-
+    public Phone(PhoneBuilder builder) {
+        this.id = builder.id;
+        this.landlineNumber = builder.landlineNumber;
+        this.mobileNumber = builder.mobileNumber;
+        this.isWork = builder.isWork;
     }
 
+    public long getId(){
+        return id;
+    }
     public String getLandlineNumber() {
         return landlineNumber;
     }
