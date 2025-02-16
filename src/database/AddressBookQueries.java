@@ -1,3 +1,4 @@
+package database;
 public class AddressBookQueries {
     Database database;
 
